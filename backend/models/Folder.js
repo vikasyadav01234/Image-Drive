@@ -19,4 +19,6 @@ const folderSchema = new mongoose.Schema({
 
 },{timestamps:true});
 
-module.exports = mongoose.model("Folder",folderSchema);
+const Folder = mongoose.model("Folder",folderSchema);
+
+export default Folder;
