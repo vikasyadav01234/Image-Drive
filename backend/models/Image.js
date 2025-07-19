@@ -9,7 +9,7 @@ const imageSchema = new mongoose.Schema({
         type:String,
         required:true,
     },
-    FolderId:{
+    folderId:{
         type:mongoose.Schema.Types.ObjectId,
         ref:"Folder",
         required:true,

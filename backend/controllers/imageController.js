@@ -2,18 +2,20 @@ import Image from "../models/Image.js";
 
 const uploadImage = async (req,res) =>{
     try{
-        const {name, folderId} = req.body;
+        const {name, folderId,userId} = req.body;
         if(!req.file || !name || !folderId){
             return res.status(501).json({
                 error:"Please provide all required fields: image file,name, and folderId"
             })
         }
+        
         const image = new Image({
             name,
             imageUrl: req.file.path,
-            folderId,
+            folderId:folderId,
             userId: userId
         })
+        console.log(image);
         await image.save();
         return res.status(200).json({
             message:"Image Uploaded Successfully",
@@ -44,7 +46,7 @@ const serchImage = async (req,res)=>{
             })
         }
         const images = await Image.find({
-            FolderId:folderId,
+            folderId:folderId,
             name: { $regex: query, $options: 'i' } 
         })
         return res.status(200).json({
@@ -52,7 +54,7 @@ const serchImage = async (req,res)=>{
             images: images.map(image => ({
                 name: image.name,
                 imageUrl: image.imageUrl,
-                folderId: image.FolderId,
+                folderId: image.folderId,
                 userId: image.userId,
                 id: image._id
             }))
@@ -75,7 +77,7 @@ const getImages = async (req,res)=>{
                 error:"Please provide folderId"
             })
         }
-        const images = await Image.find({FolderId: folderId});
+        const images = await Image.find({folderId: folderId});
         return res.status(200).json({
             message:"Images Fetched Successfully",
             images: images.map(image => ({
