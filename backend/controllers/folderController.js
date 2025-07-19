@@ -1,8 +1,9 @@
 import Folder from '../models/Folder.js'
-
+import {ObjectId} from 'mongoose'
 const createFolder = async (req,res)=>{
     try{
-        const {name,parentFolderId,userId} = req.body;
+        const {name,parentFolderId} = req.body;
+        const userId = req.user._id.toString(); 
         if(!name){
             return res.status(400).json({error:"Please provide a folder name"});
         }
@@ -33,9 +34,13 @@ const createFolder = async (req,res)=>{
 
 const getFolders = async (req,res)=>{
     try{
-        const {userId} = req.body
+        // const vikas = req.user._id.toString();
+        // console.log(typeof vikas);
+        // console.log("User ID:", vikas);
+        const userId = req.user._id.toString();
+        console.log("Fetching folders for user:", userId);
         const folders = await Folder.find({userId})
-        console.log("Folders Fetched:", folders);
+        console.log(folders);
         return res.status(200).json({
             message: "Folders Fetched Successfully",
             folders: folders.map(folder=>({

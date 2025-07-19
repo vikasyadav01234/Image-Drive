@@ -1,25 +1,25 @@
-// src/pages/FolderPage.jsx
-
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
+import { getFolders } from '../context/folderService';
 
 const Folder = () => {
   const [folders, setFolders] = useState([]);
   const [folderName, setFolderName] = useState("");
 
   // Replace this with actual auth token logic if needed
-  const token = localStorage.getItem("token");
-
+ const token = localStorage.getItem("token");
+  //console.log("Token:", token);
+    //const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4N2IyNjU1NDVjZTc2OWI2YzBiZGFiOCIsImlhdCI6MTc1MjkyMjQ1MCwiZXhwIjoxNzUzMDA4ODUwfQ.WmTNDwqmYa73SFaTc8gnDmge4D2D0HGbPcht5gJ_t04"
   // Fetch folders
+    const userId = JSON.parse(localStorage.getItem("user")).id;
+    console.log("User ID:", userId);
   const fetchFolders = async () => {
     try {
-      const res = await axios.get("http://localhost:8000/api/v1/folder/getfolders", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setFolders(res.data.folders);
+      const res = await getFolders({userId});
+      console.log("Fetched folders:", res);
+
+      setFolders(res);
     } catch (err) {
       toast.error("Failed to load folders");
       console.error(err);
@@ -31,7 +31,7 @@ const Folder = () => {
     e.preventDefault();
     try {
       const res = await axios.post(
-        "/api/v1/folders/create",
+        "http://localhost:8000/api/v1/folder/createfolder",
         { name: folderName },
         {
           headers: {

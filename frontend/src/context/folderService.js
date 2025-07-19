@@ -1,6 +1,6 @@
 import API from "../services/axios";
 
-export const getFolders = async()=>{
+export const getFolders = async(userId)=>{
     try{
         const res = await API.get("/folder/getfolders");
         return res.data.folders;

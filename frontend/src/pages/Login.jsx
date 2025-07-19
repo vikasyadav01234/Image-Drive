@@ -21,6 +21,11 @@ const Login = () => {
         e.preventDefault();
         try{
             const res = await loginUser(userData);
+            console.log("Login successful", res.user.id);
+            const {token, user} = res;
+            localStorage.setItem("token", token);
+            localStorage.setItem("user", JSON.stringify(user));
+            
             toast.success("Login Successful");
             navigate("/folders")
         }
