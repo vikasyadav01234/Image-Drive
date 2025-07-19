@@ -60,4 +60,33 @@ const getFolders = async (req,res)=>{
     }
 }
 
-export {createFolder, getFolders};
+const deleteFolder = async (req,res)=>{
+    try{
+        const {folderId} = req.params;
+        if(!folderId){
+            return res.status(400).json({error:"Please provide folderId"});
+        }
+        const folder = await Folder.findById(folderId);
+        if(!folder){
+            return res.status(404).json({error:"Folder Not Found"});
+        }
+        // Check if the folder belongs to the user
+        if(folder.userId.toString() !== req.user._id.toString()){
+            return res.status(403).json({error:"You are not authorized to delete this folder"});
+        }
+        // Delete the folder
+        await Folder.findByIdAndDelete(folderId);
+        return res.status(200).json({
+            message:"Folder Deleted Successfully",
+            folderId: folderId
+        })
+    }
+        catch(err){
+        console.log(err.message);
+        res.status(500).json({
+            error:"Internal Server Error",
+            message: err.message
+        })
+    }
+}
+export {createFolder, getFolders,deleteFolder};
