@@ -7,6 +7,7 @@ const signup = async (req,res)=>{
     try{
         const {username, email, password} = req.body;
         if(!username || !email || !password){
+            console.log("Error: Missing fields in signup request");
             return res.status(400).json({err:"Please Fill All Fields"});
         }
         const existinguser = await User.find({email});
